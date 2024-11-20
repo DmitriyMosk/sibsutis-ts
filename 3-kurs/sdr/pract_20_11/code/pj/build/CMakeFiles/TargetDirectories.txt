@@ -1,0 +1,3 @@
+/home/dmitry2401/dev/git_projects/sibsutis-ts/3-kurs/sdr/pract_20_11/code/pj/build/CMakeFiles/main.dir
+/home/dmitry2401/dev/git_projects/sibsutis-ts/3-kurs/sdr/pract_20_11/code/pj/build/CMakeFiles/edit_cache.dir
+/home/dmitry2401/dev/git_projects/sibsutis-ts/3-kurs/sdr/pract_20_11/code/pj/build/CMakeFiles/rebuild_cache.dir
