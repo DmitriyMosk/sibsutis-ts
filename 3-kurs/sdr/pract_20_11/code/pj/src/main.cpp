@@ -15,7 +15,6 @@
 #define MHZ(x) ((long long)(x*1000000.0 + .5))
 #define GHZ(x) ((long long)(x*1000000000.0 + .5))
 
-
 /* IIO structs required for streaming */
 static struct iio_context *ctx   = NULL;
 static struct iio_channel *rx0_i = NULL;
@@ -28,8 +27,6 @@ static struct iio_stream  *rxstream = NULL;
 static struct iio_stream  *txstream = NULL;
 static struct iio_channels_mask *rxmask = NULL;
 static struct iio_channels_mask *txmask = NULL;
-
-
 
 /* cleanup and exit */
 static void shutdown(void)
@@ -71,19 +68,16 @@ int main() {
     struct stream_cfg rxcfg;
 	struct stream_cfg txcfg;
 
-    rxcfg.bw_hz = MHZ(1);   // 2 MHz rf bandwidth
-	rxcfg.fs_hz = MHZ(2);   // 2.5 MS/s rx sample rate
-	rxcfg.lo_hz = MHZ(900); // 2.5 GHz rf frequency
-	rxcfg.rfport = "A_BALANCED"; // port A (select for rf freq.)
+    rxcfg.bw_hz = MHZ(1);               // 2 MHz rf bandwidth
+	rxcfg.fs_hz = MHZ(2);               // 2.5 MS/s rx sample rate
+	rxcfg.lo_hz = MHZ(900);             // 2.5 GHz rf frequency
+	rxcfg.rfport = "A_BALANCED";        // port A (select for rf freq.)
 
-	// TX stream config
-	txcfg.bw_hz = MHZ(1); // 1 MHz rf bandwidth
-	txcfg.fs_hz = MHZ(2);   // 2.5 MS/s tx sample rate
-	txcfg.lo_hz = MHZ(1000); // 2.5 GHz rf frequency
-	txcfg.rfport = "A"; // port A (select for rf freq.)
+	txcfg.bw_hz = MHZ(1);               // 1 MHz rf bandwidth
+	txcfg.fs_hz = MHZ(2);               // 2.5 MS/s tx sample rate
+	txcfg.lo_hz = MHZ(1000);            // 2.5 GHz rf frequency
+	txcfg.rfport = "A";                 // port A (select for rf freq.)
 
-
-    // Initialize IIO context
     ctx = iio_create_context(NULL, "ip:192.168.2.1");
     if(!ctx){
         std::cerr << "Unable to create IIO context addr: " << "ip:192.168.2.1" << std::endl;
