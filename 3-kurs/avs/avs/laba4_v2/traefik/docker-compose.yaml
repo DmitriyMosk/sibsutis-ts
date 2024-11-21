@@ -1,0 +1,47 @@
+services:
+  traefik:
+    image: "traefik:v3.2"
+    command:
+      - "--api.insecure=true"                      
+      - "--providers.docker=true"                   
+      - "--entrypoints.web.address=:80"             
+      - "--log.level=INFO"
+    ports:
+      - "80:80"                                    
+      - "8080:8080"                                
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   
+    networks:
+      - webnet
+
+  nginx1:
+    build:
+      context: ./../nginx
+      dockerfile: nginx.Dockerfile
+    volumes:
+      - ./../nginx/mnt/nginx1_web:/var/www/html
+    labels:
+      - "traefik.enable=true"                       
+      - "traefik.http.routers.nginx.rule=Host(`localhost`)"     
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
+      - "traefik.http.services.nginx.loadbalancer.sticky=false" 
+    networks:
+      - webnet
+
+  nginx2:
+    build:
+      context: ./../nginx
+      dockerfile: nginx.Dockerfile
+    volumes:
+      - ./../nginx/mnt/nginx2_web:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`localhost`)"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
+      - "traefik.http.services.nginx.loadbalancer.sticky=false" 
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    driver: bridge

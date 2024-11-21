@@ -1,0 +1,35 @@
+---
+- name: Gather system information on remote hosts
+  hosts: localhost,host1,host2
+  gather_facts: yes
+  tasks:
+    - name: Create system info file on remote hosts
+      template:
+        src: templates/info_template.j2
+        dest: /home/ansible/saves/system_info_remote.yaml
+
+- name: Collect info from all hosts and save on control node
+  hosts: localhost,host1,host2
+  gather_facts: yes
+  tasks:
+    - name: Create temporary directory on control node
+      local_action:
+        module: file
+        path: /home/ansible/saves/ansible/tmp
+        state: directory
+      run_once: true
+
+    - name: Gather and save host facts locally
+      local_action:
+        module: template
+        src: templates/info_template.j2
+        dest: /home/ansible/saves/ansible/tmp/{{ inventory_hostname }}.yaml
+
+- name: Aggregate host info
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Aggregate host info
+      assemble:
+        src: /home/ansible/saves/ansible/tmp
+        dest: /home/ansible/saves/ansible/system_info_local.yaml

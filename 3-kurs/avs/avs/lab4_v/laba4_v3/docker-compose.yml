@@ -1,0 +1,50 @@
+services:
+  backend1:
+    build:
+      context: ./host1
+      dockerfile: ./../Dockerfile
+    environment:
+      - SERVER_ID=1
+    ports:
+      - "3001:80"
+    networks:
+      - bridge_network
+
+  backend2:
+    build:
+      context: ./host2
+      dockerfile: ./../Dockerfile
+    environment:
+      - SERVER_ID=2
+    ports:
+      - "3002:80"
+    networks:
+      - bridge_network
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx_balancer/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend1
+      - backend2
+    networks:
+      - bridge_network
+
+  haproxy:
+    image: haproxy:latest
+    volumes:
+      - ./haproxy_balancer/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend1
+      - backend2
+    networks:
+      - bridge_network
+
+networks:
+  bridge_network:
+    driver: bridge

@@ -1,0 +1,58 @@
+services:
+  traefik:
+    build:
+      context: . 
+      dockerfile: traefik.Dockerfile
+    container_name: "traefik"
+    ports:
+      - "80:80"  # Порт для входящих запросов
+      - "8080:8080"  # Порт для панели управления Traefik
+    networks:
+      mynet:
+        ipv4_address: 192.168.1.100
+    command:
+      - "--api.insecure=true"  # Включаем панель управления Traefik
+      - "--providers.docker=true"  # Включаем поддержку Docker
+      - "--entrypoints.web.address=:80"  # Настройка точки входа
+    privileged: true
+    
+  backend1:
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    container_name: "backend1"
+    networks:
+      mynet:
+        ipv4_address: 192.168.1.101
+    volumes:
+      - ./mnt/backend1:/usr/share/nginx/html
+    privileged: true
+    labels:
+      - "traefik.enable=true"  # Включение Traefik для этого контейнера
+      - "traefik.http.routers.backend1.rule=Host(`backend1.local`)"  # Правило маршрутизации
+      - "traefik.http.services.backend.loadbalancer.servers=192.168.1.101"  # Указать адрес сервера
+      - "traefik.http.services.backend.loadbalancer.servers.scheme=http"  # Указать схему для сервера
+
+  backend2:
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    container_name: "backend2"
+    networks:
+      mynet:
+        ipv4_address: 192.168.1.102
+    volumes:
+      - ./mnt/backend2:/usr/share/nginx/html
+    privileged: true
+    labels:
+      - "traefik.enable=true"  # Включение Traefik для этого контейнера
+      - "traefik.http.routers.backend2.rule=Host(`backend2.local`)"  # Правило маршрутизации
+      - "traefik.http.services.backend.loadbalancer.servers=192.168.1.102"  # Указать адрес сервера
+      - "traefik.http.services.backend.loadbalancer.servers.scheme=http"  # Указать схему для сервера
+
+networks:
+  mynet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24

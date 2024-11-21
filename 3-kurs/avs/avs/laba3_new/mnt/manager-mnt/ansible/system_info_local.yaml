@@ -1,0 +1,21 @@
+---
+system_info:
+  hostname: ca104e56b98f
+  distribution: Ubuntu
+  distribution_version: 24.04
+  architecture: x86_64
+  uptime: 2964
+---
+system_info:
+  hostname: 6cb055c419ee
+  distribution: Ubuntu
+  distribution_version: 24.04
+  architecture: x86_64
+  uptime: 2964
+---
+system_info:
+  hostname: d52d173dbbd4
+  distribution: Ubuntu
+  distribution_version: 24.04
+  architecture: x86_64
+  uptime: 2964
