@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  backend1:
+    image: nginx:alpine
+    container_name: backend1
+    command: >
+      sh -c "echo '<h1>Backend 1</h1>' > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'"
+    networks:
+      - backend
+
+  backend2:
+    image: nginx:alpine
+    container_name: backend2
+    command: >
+      sh -c "echo '<h1>Backend 2</h1>' > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'"
+    networks:
+      - backend
+
+  haproxy:
+    image: haproxy:alpine
+    container_name: haproxy
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - "80:80"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

@@ -1,0 +1,47 @@
+services:
+  ipvs-setup:
+    image: alpine:latest
+    container_name: ipvs-setup
+    networks:
+      mynet:
+        ipv4_address: 192.168.10.99
+    privileged: true   
+    ports:
+      - "80:80"                                    
+    volumes:
+      - ./conf/setup-ipvs.sh:/setup-ipvs.sh       
+    entrypoint: ["sh", "/setup-ipvs.sh"]     
+    depends_on:
+      - backend1
+      - backend2
+
+  backend1:
+    build:
+      context: ./../nginx
+      dockerfile: nginx.Dockerfile
+    container_name: "backend1"
+    networks:
+      mynet:
+        ipv4_address: 192.168.10.101
+    volumes:
+      - ./../nginx/mnt/nginx1_web:/var/www/html
+    privileged: true
+
+  backend2:
+    build:
+      context: ./../nginx
+      dockerfile: nginx.Dockerfile
+    container_name: "backend2"
+    networks:
+      mynet:
+        ipv4_address: 192.168.10.102
+    volumes:
+      - ./../nginx/mnt/nginx2_web:/var/www/html
+    privileged: true
+
+networks:
+  mynet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
