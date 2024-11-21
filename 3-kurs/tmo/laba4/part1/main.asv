@@ -1,0 +1,37 @@
+syms x; 
+
+f = sin(x)^2 - exp(-2*x);
+df = diff(f, x); 
+F = int(f, x);
+
+figure;
+
+subplot(3, 1, 1);
+fplot(matlabFunction(f), [0, 10]);
+title('Функция f(x)');
+xlabel('x');
+ylabel('f(x)');
+grid on;
+
+subplot(3, 1, 2);
+fplot(matlabFunction(df), [0, 10]);
+title('Производная f(x)');
+xlabel('x');
+ylabel('df(x)/dx');
+grid on;
+
+subplot(3, 1, 3);
+fplot(matlabFunction(F), [0, 10]);
+title('Интеграл f(x)');
+xlabel('x');
+ylabel('∫f(x)dx');
+grid on;
+hold on;
+% Добавим зарисовку площади под интегралом
+x_vals = linspace(0, 10, 1000);
+y_vals = arrayfun(matlabFunction(F), x_vals);
+fill([x_vals fliplr(x_vals)], [zeros(1, length(x_vals)) fliplr(y_vals)], 'b', 'FaceAlpha', 0.3);
+hold off;
+
+a = 1;  % Коэффициент a
+b = -0.5;  % Коэффициент b
