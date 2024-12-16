@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/dmitry2401/dev/git_projects/sibsutis-ts/3-kurs/sdr/pract_20_11/code",
-      "program": "/home/dmitry2401/dev/git_projects/sibsutis-ts/3-kurs/sdr/pract_20_11/code/build/Debug/outDebug",
+      "cwd": "/home/dmitry2401/dev/git_projects/sibsutis-ts",
+      "program": "/home/dmitry2401/dev/git_projects/sibsutis-ts/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

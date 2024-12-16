@@ -1,0 +1,29 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:latest
+    container_name: jenkins-server
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JENKINS_OPTS=--httpPort=-1 --httpsPort=8080
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+
+  nginx:
+    image: nginx:alpine
+    container_name: jenkins-nginx
+    restart: unless-stopped
+    ports:
+      - "443:443"    
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - jenkins
+
+volumes:
+  jenkins_home:
